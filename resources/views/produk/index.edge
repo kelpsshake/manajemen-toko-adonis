@@ -1,0 +1,91 @@
+@layouts.main()
+<div class="max-w-6xl mx-auto mt-10">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Daftar Produk</h2>
+    <a href="{{ route('produk.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      + Tambah Produk
+    </a>
+  </div>
+
+  <div class="bg-white p-4 rounded shadow mb-4">
+    <form method="GET" action="{{ route('produk.index') }}">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Filter Kategori</label>
+          <select name="kategoriId" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <option value="">Semua Kategori</option>
+            @each(kategori in kategoris)
+              <option value="{{ kategori.id }}" {{ selectedFilters.kategoriId == kategori.id ? 'selected' : '' }}>
+                {{ kategori.nama_kategori }}
+              </option>
+            @end
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Filter Supplier</label>
+          <select name="supplierId" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <option value="">Semua Supplier</option>
+            @each(supplier in suppliers)
+              <option value="{{ supplier.id }}" {{ selectedFilters.supplierId == supplier.id ? 'selected' : '' }}>
+                {{ supplier.namaSupplier }}
+              </option>
+            @end
+          </select>
+        </div>
+
+        <div class="flex space-x-2">
+          <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+            Filter
+          </button>
+          <a href="{{ route('produk.index') }}" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+            Reset
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+  @if(flashMessages.get('success'))
+    <div class="bg-green-100 text-green-700 p-3 rounded mb-4">{{ flashMessages.get('success') }}</div>
+  @endif
+
+  <table class="w-full table-auto border shadow bg-white">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="px-4 py-2 border">ID</th>
+        <th class="px-4 py-2 border">Nama Produk</th>
+        <th class="px-4 py-2 border">Harga</th>
+        <th class="px-4 py-2 border">Stok</th>
+        <th class="px-4 py-2 border">Kategori</th>
+        <th class="px-4 py-2 border">Supplier</th>
+        <th class="px-4 py-2 border">Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      @if(produks.length > 0)
+        @each(produk in produks)
+          <tr>
+            <td class="px-4 py-2 border">{{ produk.id }}</td>
+            <td class="px-4 py-2 border">{{ produk.namaProduk }}</td>
+            <td class="px-4 py-2 border">Rp {{ produk.harga.toLocaleString('id-ID') }}</td>
+            <td class="px-4 py-2 border">{{ produk.stok }}</td>
+            <td class="px-4 py-2 border">{{ produk.kategori?.nama_kategori || 'N/A' }}</td>
+            <td class="px-4 py-2 border">{{ produk.supplier?.namaSupplier || 'N/A' }}</td>
+            <td class="px-4 py-2 border text-center">
+              <a href="{{ route('produk.edit', { id: produk.id }) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
+              <form method="POST" action="{{ route('produk.destroy', { id: produk.id }) }}?_method=DELETE" class="inline" onsubmit="return confirm('Hapus produk ini?')">
+                {{ csrfField() }}
+                <button class="text-red-600 hover:underline ml-2" type="submit">Hapus</button>
+              </form>
+            </td>
+          </tr>
+        @end
+      @else
+        <tr>
+          <td colspan="7" class="text-center py-4 text-gray-500">Tidak ada produk yang cocok dengan filter.</td>
+        </tr>
+      @endif
+    </tbody>
+  </table>
+</div>
+@end

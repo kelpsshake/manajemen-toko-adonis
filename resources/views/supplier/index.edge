@@ -1,0 +1,49 @@
+@layouts.main()
+<div class="max-w-4xl mx-auto mt-10">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Daftar Supplier</h2>
+    <a href="{{ route('supplier.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      + Tambah Supplier
+    </a>
+  </div>
+
+  @if(flashMessages.get('success'))
+    <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
+      {{ flashMessages.get('success') }}
+    </div>
+  @endif
+
+  @if(suppliers && suppliers.length)
+    <table class="w-full table-auto border shadow bg-white">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-2 border">ID</th>
+          <th class="px-4 py-2 border">Nama Supplier</th>
+          <th class="px-4 py-2 border">Alamat</th>
+          <th class="px-4 py-2 border">Telepon</th>
+          <th class="px-4 py-2 border">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        @each(supplier in suppliers)
+          <tr>
+            <td class="px-4 py-2 border">{{ supplier.id }}</td>
+            <td class="px-4 py-2 border">{{ supplier.namaSupplier }}</td>
+            <td class="px-4 py-2 border">{{ supplier.alamat || '-' }}</td>
+            <td class="px-4 py-2 border">{{ supplier.telepon || '-' }}</td>
+            <td class="px-4 py-2 border text-center">
+              <a href="{{ route('supplier.edit', { id: supplier.id }) }}" class="text-blue-600 hover:underline mr-2">Edit</a>
+              <form method="POST" action="{{ route('supplier.destroy', { id: supplier.id }) }}?_method=DELETE" class="inline" onsubmit="return confirm('Anda yakin ingin menghapus supplier ini?')">
+                {{ csrfField() }}
+                <button class="text-red-600 hover:underline ml-2" type="submit">Hapus</button>
+              </form>
+            </td>
+          </tr>
+        @end
+      </tbody>
+    </table>
+  @else
+    <p class="text-center text-gray-500 py-4">Belum ada data supplier.</p>
+  @endif
+</div>
+@end

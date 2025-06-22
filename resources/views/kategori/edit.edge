@@ -1,0 +1,40 @@
+@layouts.main()
+
+@section('title')
+  Edit Kategori
+@endsection
+
+@section('content')
+  <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow">
+    <h2 class="text-xl font-semibold mb-4">Edit Kategori</h2>
+
+    @if(flashMessages.error)
+      <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+        {{ flashMessages.error }}
+      </div>
+    @endif
+
+    <form method="POST" action="/kategori/{{ kategori.id }}">
+      <input type="hidden" name="_method" value="PUT" />
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+      <div class="mb-4">
+        <label class="block mb-1 font-medium">Nama Kategori</label>
+        <input 
+          type="text" 
+          name="nama_kategori" 
+          value="{{ kategori.nama_kategori }}" 
+          required 
+          class="w-full border px-3 py-2 rounded" 
+        />
+      </div>
+
+      <div class="flex justify-end space-x-2">
+        <a href="/kategori" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Batal</a>
+        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Update</button>
+      </div>
+    </form>
+  </div>
+@endsection
+
+@end

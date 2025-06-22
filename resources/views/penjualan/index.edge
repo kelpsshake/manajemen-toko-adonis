@@ -1,0 +1,37 @@
+@layouts.main()
+<div class="max-w-4xl mx-auto mt-10">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Riwayat Penjualan</h2>
+    <a href="{{ route('penjualan.create') }}" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+      + Catat Penjualan Baru
+    </a>
+  </div>
+
+  @if(flashMessages.get('success'))
+    <div class="bg-green-100 text-green-700 p-3 rounded mb-4">{{ flashMessages.get('success') }}</div>
+  @endif
+
+  <table class="w-full table-auto border shadow bg-white">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="px-4 py-2 border">Tanggal</th>
+        <th class="px-4 py-2 border">Nama Produk</th>
+        <th class="px-4 py-2 border">Harga Satuan</th>
+        <th class="px-4 py-2 border">Jumlah</th>
+        <th class="px-4 py-2 border">Total Harga</th>
+      </tr>
+    </thead>
+    <tbody>
+      @each(penjualan in penjualans)
+        <tr>
+          <td class="px-4 py-2 border">{{ penjualan.tanggal.toFormat('dd LLLL yyyy, HH:mm') }}</td>
+          <td class="px-4 py-2 border">{{ penjualan.produk.namaProduk }}</td>
+          <td class="px-4 py-2 border">Rp {{ penjualan.produk.harga.toLocaleString('id-ID') }}</td>
+          <td class="px-4 py-2 border text-center">{{ penjualan.jumlah }}</td>
+          <td class="px-4 py-2 border">Rp {{ (penjualan.produk.harga * penjualan.jumlah).toLocaleString('id-ID') }}</td>
+        </tr>
+      @end
+    </tbody>
+  </table>
+</div>
+@end

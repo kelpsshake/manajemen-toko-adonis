@@ -1,0 +1,54 @@
+@layouts.main()
+
+<div class="flex justify-between items-center mb-4">
+  <h2 class="text-2xl font-bold">Daftar Kategori</h2>
+  <a href="/kategori/create" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+    + Tambah Kategori
+  </a>
+</div>
+
+@if(flashMessages.success)
+  <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
+    {{ flashMessages.success }}
+  </div>
+@endif
+
+@if(flashMessages.error)
+  <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+    {{ flashMessages.error }}
+  </div>
+@endif
+
+@if(kategoris && kategoris.length)
+  <table class="w-full table-auto border shadow bg-white">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="px-4 py-2 border">ID</th>
+        <th class="px-4 py-2 border">Nama Kategori</th>
+        <th class="px-4 py-2 border">Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      @each(kategori in kategoris)
+        <tr>
+          <td class="px-4 py-2 border">{{ kategori.id }}</td>
+          <td class="px-4 py-2 border">{{ kategori.nama_kategori }}</td>
+          <td class="px-4 py-2 border">
+            <a href="/kategori/{{ kategori.id }}/edit" class="text-blue-600 hover:underline mr-2">Edit</a>
+            <form method="POST" action="/kategori/{{ kategori.id }}" class="inline" onsubmit="return confirm('Hapus data ini?')">
+              <input type="hidden" name="_method" value="DELETE" />
+              <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+              <button class="text-red-600 hover:underline ml-2" type="submit">
+                Hapus
+              </button>
+            </form>
+          </td>
+        </tr>
+      @end
+    </tbody>
+  </table>
+@else
+  <p class="text-center text-gray-500 py-4">Belum ada data.</p>
+@endif
+
+@end

@@ -1,0 +1,38 @@
+@layouts.main()
+
+<div class="max-w-md mx-auto mt-16 bg-white p-8 rounded shadow">
+  <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+
+  @if(flashMessages.error)
+    <div class="bg-red-100 text-red-700 p-2 rounded mb-4">
+      {{ flashMessages.error }}
+    </div>
+  @endif
+
+  <form method="POST" action="/login" class="space-y-4">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+    <div>
+      <label class="block font-semibold mb-1">Email</label>
+      <input type="email" name="email" required class="w-full border px-3 py-2 rounded" />
+    </div>
+
+    <div>
+      <label class="block font-semibold mb-1">Password</label>
+      <input type="password" name="password" required class="w-full border px-3 py-2 rounded" />
+    </div>
+
+    <div>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+        Login
+      </button>
+    </div>
+  </form>
+
+  <p class="mt-4 text-center text-sm">
+    Belum punya akun?
+    <a href="/register" class="text-blue-600 hover:underline">Daftar</a>
+  </p>
+</div>
+
+@end
